@@ -1,0 +1,225 @@
+<!DOCTYPE html><html lang="en" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="theme" content="Chirpy v2.6.2"><meta name="generator" content="Jekyll v4.1.1" /><meta property="og:title" content="golang gopacket 라이브러리를 이용한 통신" /><meta name="author" content="Sangjun Cha" /><meta property="og:locale" content="en_US" /><meta name="description" content="설명" /><meta property="og:description" content="설명" /><link rel="canonical" href="https://sangjuncha-dev.github.io//posts/golang-gopacket/" /><meta property="og:url" content="https://sangjuncha-dev.github.io//posts/golang-gopacket/" /><meta property="og:site_name" content="Sangjun" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2021-07-29T17:12:58+09:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="golang gopacket 라이브러리를 이용한 통신" /><meta name="twitter:site" content="@/" /><meta name="twitter:creator" content="@Sangjun Cha" /><meta name="google-site-verification" content="google_meta_tag_verification" /> <script type="application/ld+json"> {"author":{"@type":"Person","name":"Sangjun Cha"},"description":"설명","url":"https://sangjuncha-dev.github.io//posts/golang-gopacket/","@type":"BlogPosting","headline":"golang gopacket 라이브러리를 이용한 통신","dateModified":"2021-07-29T17:12:58+09:00","datePublished":"2021-07-29T17:12:58+09:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://sangjuncha-dev.github.io//posts/golang-gopacket/"},"@context":"https://schema.org"}</script><title>golang gopacket 라이브러리를 이용한 통신 | Sangjun</title><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon"><link rel="icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon"><link rel="manifest" href="/assets/img/favicons/manifest.json"><meta name='msapplication-config' content='/assets/img/favicons/browserconfig.xml'><meta name="msapplication-TileColor" content="#ffffff"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://fonts.gstatic.com"><link rel="preconnect" href="https://www.google-analytics.com" crossorigin="use-credentials"><link rel="dns-prefetch" href="https://www.google-analytics.com"><link rel="preconnect" href="https://www.googletagmanager.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="cdn.jsdelivr.net"><link rel="dns-prefetch" href="cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha256-LA89z+k9fjgMKQ/kq4OO2Mrf8VltYml/VES+Rg0fh20=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous"><link rel="preload" href="/assets/css/post.css" as="style"><link rel="stylesheet" href="/assets/css/post.css"><link rel="preload" as="style" href="/assets/css/lib/bootstrap-toc.min.css"><link rel="stylesheet" href="/assets/css/lib/bootstrap-toc.min.css" /> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script async src="https://cdn.jsdelivr.net/combine/npm/popper.js@1.15.0,npm/bootstrap@4/dist/js/bootstrap.min.js"></script> <script async src="/assets/js/post.min.js"></script> <script defer src="/app.js"></script><body data-spy="scroll" data-target="#toc"><div id="sidebar" class="d-flex flex-column"><div id="nav-wrapper"><div id="profile-wrapper" class="d-flex flex-column"><div id="avatar" class="d-flex justify-content-center"> <a href="/" alt="avatar"> <img src="/assets/img/sample/avatar.jpg" alt="avatar" onerror="this.style.display='none'"> </a></div><div class="profile-text mt-3"><div class="site-title"> <a href="/">Sangjun</a></div><div class="site-subtitle font-italic">정보 블로그</div></div></div><ul class="nav flex-column"><li class="nav-item d-flex justify-content-center "> <a href="/" class="nav-link d-flex justify-content-center align-items-center w-100"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a><li class="nav-item d-flex justify-content-center "> <a href="/tabs/categories/" class="nav-link d-flex justify-content-center align-items-center w-100"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a><li class="nav-item d-flex justify-content-center "> <a href="/tabs/tags/" class="nav-link d-flex justify-content-center align-items-center w-100"> <i class="fa-fw fas fa-tags ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a><li class="nav-item d-flex justify-content-center "> <a href="/tabs/archives/" class="nav-link d-flex justify-content-center align-items-center w-100"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a><li class="nav-item d-flex justify-content-center "> <a href="/tabs/about/" class="nav-link d-flex justify-content-center align-items-center w-100"> <i class="fa-fw fas fa-info ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a></ul></div><div class="sidebar-bottom d-flex flex-wrap justify-content-around mt-4"> <span id="mode-toggle-wrapper"> <i class="mode-toggle fas fa-adjust"></i> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } constructor() { if (this.mode != null) { if (this.mode == ModeToggle.DARK_MODE) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } var self = this; /* always follow the system prefers */ this.sysDarkPrefers.addListener(function() { if (self.mode != null) { if (self.mode == ModeToggle.DARK_MODE) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } }); } /* constructor() */ setDark() { $('html').attr(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_KEY); sessionStorage.removeItem(ModeToggle.MODE_KEY); } get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode == ModeToggle.DARK_MODE; } get isLightMode() { return this.mode == ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } flipMode() { if (this.hasMode) { if (this.isSysDarkPrefer) { if (this.isLightMode) { this.clearMode(); } else { this.setLight(); } } else { if (this.isDarkMode) { this.clearMode(); } else { this.setDark(); } } } else { if (this.isSysDarkPrefer) { this.setLight(); } else { this.setDark(); } } } /* flipMode() */ } /* ModeToggle */ let toggle = new ModeToggle(); $(".mode-toggle").click(function() { toggle.flipMode(); }); </script> </span> <span class="icon-border"></span> <a href="https://github.com/sangjuncha-dev" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github-alt"></i> </a> <a href="https://twitter.com//" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href=" javascript:location.href = 'mailto:' + ['sangjuncha.dev','gmail.com'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></div><div id="topbar-wrapper" class="row justify-content-center topbar-down"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Posts </a> </span> <span>golang gopacket 라이브러리를 이용한 통신</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" placeholder="Search..."> <i class="fa fa-times-circle fa-fw" id="search-cleaner"></i> </span> <span id="search-cancel" >Cancel</span></div></div><div id="main-wrapper"><div id="main"><div class="row"><div id="post-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><h1 data-toc-skip>golang gopacket 라이브러리를 이용한 통신</h1><div class="post-meta text-muted d-flex flex-column"><div> Posted <span class="timeago " data-toggle="tooltip" data-placement="bottom" title="Thu, Jul 29, 2021, 5:12 PM +0900" > Jul 29 <i class="unloaded">2021-07-29T17:12:58+09:00</i> </span> by <span class="author"> Sangjun Cha </span></div></div><div class="post-content"><h1 id="설명">설명</h1><p>ethernet 통신</p><ul><li>이더넷 어댑터 설명(dev.Description)을 기준으로 통신하는 코드이다.</ul><h1 id="예제-코드">예제 코드</h1><div class="language-go highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+</pre><td class="rouge-code"><pre><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="p">(</span>
+	<span class="s">"fmt"</span>
+	<span class="s">"log"</span>
+	<span class="s">"net"</span>
+	<span class="s">"strings"</span>
+	<span class="s">"time"</span>
+
+	<span class="s">"github.com/google/gopacket"</span>
+	<span class="s">"github.com/google/gopacket/layers"</span>
+	<span class="s">"github.com/google/gopacket/pcap"</span>
+<span class="p">)</span>
+
+<span class="k">var</span> <span class="p">(</span>
+	<span class="n">device</span>       <span class="kt">string</span> <span class="o">=</span> <span class="s">"Realtek PCIe GbE Family Controller"</span>
+	<span class="n">eth_name</span>     <span class="kt">string</span>
+	<span class="n">currentIP</span>    <span class="kt">string</span>
+	<span class="n">snapshot_len</span> <span class="kt">int32</span> <span class="o">=</span> <span class="m">1522</span>
+	<span class="n">promiscuous</span>  <span class="kt">bool</span>  <span class="o">=</span> <span class="no">false</span>
+	<span class="n">err</span>          <span class="kt">error</span>
+	<span class="n">timeout</span>      <span class="n">time</span><span class="o">.</span><span class="n">Duration</span> <span class="o">=</span> <span class="m">30</span> <span class="o">*</span> <span class="n">time</span><span class="o">.</span><span class="n">Second</span>
+	<span class="n">handle</span>       <span class="o">*</span><span class="n">pcap</span><span class="o">.</span><span class="n">Handle</span>
+	<span class="n">buffer</span>       <span class="n">gopacket</span><span class="o">.</span><span class="n">SerializeBuffer</span>
+	<span class="n">options</span>      <span class="n">gopacket</span><span class="o">.</span><span class="n">SerializeOptions</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">devices</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">pcap</span><span class="o">.</span><span class="n">FindAllDevs</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">log</span><span class="o">.</span><span class="n">Fatalln</span><span class="p">(</span><span class="s">"pcap.FindAllDevs Error :"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">dev</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">devices</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">device</span> <span class="o">==</span> <span class="n">dev</span><span class="o">.</span><span class="n">Description</span> <span class="p">{</span>
+			<span class="n">device</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">Name</span>
+			<span class="n">currentIP</span> <span class="o">=</span> <span class="n">dev</span><span class="o">.</span><span class="n">Addresses</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">.</span><span class="n">IP</span><span class="o">.</span><span class="n">String</span><span class="p">()</span>
+			<span class="c">// fmt.Println("dev.Name =", dev.Name)</span>
+			<span class="c">// fmt.Println("dev.Description =", dev.Description)</span>
+			<span class="c">// fmt.Println("dev.Addresses =", currentIP)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="n">src_mac</span> <span class="o">:=</span> <span class="n">get_mac</span><span class="p">(</span><span class="n">currentIP</span><span class="p">)</span>
+
+	<span class="c">// Open device</span>
+	<span class="n">handle</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">pcap</span><span class="o">.</span><span class="n">OpenLive</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">snapshot_len</span><span class="p">,</span> <span class="n">promiscuous</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="s">"pcap.OpenLive Error :"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">defer</span> <span class="n">handle</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
+
+	<span class="c">// Send raw bytes over wire</span>
+	<span class="n">rawBytes</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">{</span><span class="m">0x33</span><span class="p">,</span> <span class="m">0x22</span><span class="p">,</span> <span class="m">0x11</span><span class="p">,</span> <span class="m">0x00</span><span class="p">}</span>
+
+	<span class="n">ethernetLayer</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">layers</span><span class="o">.</span><span class="n">Ethernet</span><span class="p">{</span>
+		<span class="n">EthernetType</span><span class="o">:</span> <span class="m">0x888E</span><span class="p">,</span>
+		<span class="n">SrcMAC</span><span class="o">:</span>       <span class="n">src_mac</span><span class="p">,</span>
+		<span class="n">DstMAC</span><span class="o">:</span>       <span class="n">net</span><span class="o">.</span><span class="n">HardwareAddr</span><span class="p">{</span><span class="m">0x11</span><span class="p">,</span> <span class="m">0x22</span><span class="p">,</span> <span class="m">0x33</span><span class="p">,</span> <span class="m">0x44</span><span class="p">,</span> <span class="m">0x55</span><span class="p">,</span> <span class="m">0x66</span><span class="p">},</span>
+	<span class="p">}</span>
+
+	<span class="n">options</span> <span class="o">:=</span> <span class="n">gopacket</span><span class="o">.</span><span class="n">SerializeOptions</span><span class="p">{</span>
+		<span class="n">ComputeChecksums</span><span class="o">:</span> <span class="no">true</span><span class="p">,</span>
+		<span class="n">FixLengths</span><span class="o">:</span>       <span class="no">true</span><span class="p">,</span>
+	<span class="p">}</span>
+
+	<span class="c">// And create the packet with the layers</span>
+	<span class="n">buffer</span> <span class="o">=</span> <span class="n">gopacket</span><span class="o">.</span><span class="n">NewSerializeBuffer</span><span class="p">()</span>
+	<span class="n">gopacket</span><span class="o">.</span><span class="n">SerializeLayers</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span>
+		<span class="n">ethernetLayer</span><span class="p">,</span>
+		<span class="n">gopacket</span><span class="o">.</span><span class="n">Payload</span><span class="p">(</span><span class="n">rawBytes</span><span class="p">),</span>
+	<span class="p">)</span>
+	<span class="n">outgoingPacket</span> <span class="o">:=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">Bytes</span><span class="p">()</span>
+
+	<span class="c">// Send our packet</span>
+	<span class="n">err</span> <span class="o">=</span> <span class="n">handle</span><span class="o">.</span><span class="n">WritePacketData</span><span class="p">(</span><span class="n">outgoingPacket</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="s">"handle.WritePacketData Error :"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">outgoingPacket</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">get_mac</span><span class="p">(</span><span class="n">currentIP</span> <span class="kt">string</span><span class="p">)</span> <span class="n">net</span><span class="o">.</span><span class="n">HardwareAddr</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="n">currentNetworkHardwareName</span> <span class="kt">string</span>
+
+	<span class="n">interfaces</span><span class="p">,</span> <span class="n">_</span> <span class="o">:=</span> <span class="n">net</span><span class="o">.</span><span class="n">Interfaces</span><span class="p">()</span>
+	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">interf</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">interfaces</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">addrs</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">interf</span><span class="o">.</span><span class="n">Addrs</span><span class="p">();</span> <span class="n">err</span> <span class="o">==</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">addr</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">addrs</span> <span class="p">{</span>
+				<span class="c">// only interested in the name with current IP address</span>
+				<span class="k">if</span> <span class="n">strings</span><span class="o">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">addr</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span> <span class="n">currentIP</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">currentNetworkHardwareName</span> <span class="o">=</span> <span class="n">interf</span><span class="o">.</span><span class="n">Name</span>
+					<span class="k">break</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="c">// fmt.Println("currentNetworkHardwareName =", currentNetworkHardwareName)</span>
+
+	<span class="c">// extract the hardware information base on the interface name</span>
+	<span class="n">netInterface</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">net</span><span class="o">.</span><span class="n">InterfaceByName</span><span class="p">(</span><span class="n">currentNetworkHardwareName</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="s">"net.InterfaceByName Error :"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="n">macAddress</span> <span class="o">:=</span> <span class="n">netInterface</span><span class="o">.</span><span class="n">HardwareAddr</span>
+
+	<span class="c">// fmt.Println("Hardware name : ", netInterface.Name)</span>
+	<span class="c">// fmt.Println("MAC address : ", macAddress)</span>
+
+	<span class="k">return</span> <span class="n">macAddress</span>
+<span class="p">}</span>
+</pre></table></code></div></div></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='/categories/go/'>Go</a>, <a href='/categories/gopacket/'>Gopacket</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/go/" class="post-tag no-text-decoration" >go</a> <a href="/tags/gopacket/" class="post-tag no-text-decoration" >gopacket</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> by the author.</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=golang gopacket 라이브러리를 이용한 통신 - Sangjun&url=https://sangjuncha-dev.github.io//posts/golang-gopacket/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=golang gopacket 라이브러리를 이용한 통신 - Sangjun&u=https://sangjuncha-dev.github.io//posts/golang-gopacket/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://telegram.me/share?text=golang gopacket 라이브러리를 이용한 통신 - Sangjun&url=https://sangjuncha-dev.github.io//posts/golang-gopacket/" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i class="fa-fw fas fa-link small" onclick="copyLink()" data-toggle="tooltip" data-placement="top" title="Copy link"></i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted topbar-down"><div class="access"><div id="access-lastmod" class="post"> <span>Recent Update</span><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/posts/golang-learn-go-with-tests/">golang learn-go-with-tests GitBook 정리</a><li><a href="/posts/Python-DataStructures-and-Algorithms/">Python 자료구조와 알고리즘(by 미아 스타인) 책 정리</a><li><a href="/posts/Golang-grammar/">Go 언어 문법 (Golang grammar)</a><li><a href="/posts/Go-for-beginners-lectures/">노마드코더 쉽고 빠른 Go 시작하기(nomadcoders Go-for-beginners lectures)</a><li><a href="/posts/Docker-PostgresDB-pgadmin4-setup-guide/">PostgreDB, pgadmin4 도커 설치 방법</a></ul></div><div id="access-tags"> <span>Trending Tags</span><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/django/">django</a> <a class="post-tag" href="/tags/library/">library</a> <a class="post-tag" href="/tags/db/">db</a> <a class="post-tag" href="/tags/models/">models</a> <a class="post-tag" href="/tags/go/">go</a> <a class="post-tag" href="/tags/learning/">learning</a> <a class="post-tag" href="/tags/algorithm/">algorithm</a> <a class="post-tag" href="/tags/docker/">docker</a> <a class="post-tag" href="/tags/postgredb/">postgredb</a></div></div></div><div id="toc-wrapper" class="pl-0 pr-4 mb-5"> <span class="pl-3 pt-2 mb-2">Contents</span><nav id="toc" data-toggle="toc"></nav></div></div></div><div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="post-extend-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><div id="related-posts" class="mt-5 mb-2 mb-sm-4"><h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3><div class="card-deck mb-4"><div class="card"> <a href="/posts/Golang-grammar/"><div class="card-body"> <span class="timeago small" > Feb 10 <i class="unloaded">2021-02-10T11:13:23+09:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Go 언어 문법 (Golang grammar)</h3><div class="text-muted small"><p> 디렉토리 관련 함수 2021년 3월 3일 수요일 오전 8:55:31 단일 디렉토리 생성 os.Mkdir(path, permission) err := os.Mkdir("tmp", 0755) if err != nil { log.Fatal(err) } 다중 디렉토리 생성 os.MkdirAll(path, permission) : err :...</p></div></div></a></div><div class="card"> <a href="/posts/Go-for-beginners-lectures/"><div class="card-body"> <span class="timeago small" > Feb 22 <i class="unloaded">2021-02-22T00:09:23+09:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>노마드코더 쉽고 빠른 Go 시작하기(nomadcoders Go-for-beginners lectures)</h3><div class="text-muted small"><p> 0. 소개 설치 환경 : Windows 10 IDE : vscode 0.1. 설치 해당 URL에서 golang 설치파일을 다운받아 실행 https://golang.org/dl/ 설치파일에서 안내한 경로인 C:\Program Files\Go 폴더에 Go 설치 되었는지 확인 0.2. 설정 Go Path 환경변수 확인 G...</p></div></div></a></div><div class="card"> <a href="/posts/golang-learn-go-with-tests/"><div class="card-body"> <span class="timeago small" > Aug 2 <i class="unloaded">2021-08-02T17:56:14+09:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>golang learn-go-with-tests GitBook 정리</h3><div class="text-muted small"><p> 사이트 주소 원본 링크 한글 번역 링크 5. struct, method &amp; interface struct 구조체의 변수 첫글자는 대문자여야한다. (외부에서 사용 가능하도록) 1 2 3 4 type Rectangle struct { Width float64 Height float64 } 구조체 필드이름을 선택적으로 지정할 수 있다...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/posts/Python-Windows10-Monitoring/" class="btn btn-outline-primary"><p>python을 이용한 windows10 시스템 정보 및 사용량 모니터링</p></a> <a href="/posts/golang-learn-go-with-tests/" class="btn btn-outline-primary"><p>golang learn-go-with-tests GitBook 정리</p></a></div></div></div></div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script> <script type="text/javascript"> const imgs = document.querySelectorAll('#post-wrapper img'); const observer = lozad(imgs); observer.observe(); </script><footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center"><div class="footer-left"><p class="mb-0"> © 2021 <a href="https://twitter.com/username">Cha Sangjun</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div><div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy/" target="_blank" rel="noopener">Chirpy</a> theme.</p></div></div></footer></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-xl-11 post-content"><div id="search-hints"><h4 class="text-muted mb-4">Trending Tags</h4><a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/django/">django</a> <a class="post-tag" href="/tags/library/">library</a> <a class="post-tag" href="/tags/db/">db</a> <a class="post-tag" href="/tags/models/">models</a> <a class="post-tag" href="/tags/go/">go</a> <a class="post-tag" href="/tags/learning/">learning</a> <a class="post-tag" href="/tags/algorithm/">algorithm</a> <a class="post-tag" href="/tags/docker/">docker</a> <a class="post-tag" href="/tags/postgredb/">postgredb</a></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.7.3/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="https://sangjuncha-dev.github.io/{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"><div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>{categories}</div><div><i class="fa fa-tag fa-fw"></i>{tags}</div></div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>' }); </script> <script async src="https://www.googletagmanager.com/gtag/js?id="></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', ''); </script>
